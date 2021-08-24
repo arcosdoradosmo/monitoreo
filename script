@@ -1,0 +1,165 @@
+package com.qualitystream.tutorial;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.JavascriptExecutor;
+
+
+public class GoogleSearchTest {
+
+	private WebDriver driver;
+	private WebDriverWait wait;
+	@Before
+	public void setUp() {
+		System.setProperty("webdriver.chrome.driver","./src/test/resources/chromedriver/chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://mop.mcdonalds.com.ar/");
+
+	}
+
+
+	@Test
+
+	public void testdeliveryscrip1() throws InterruptedException {
+
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+		WebElement element = driver.findElement(By.linkText("Ver detalle"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(element).click().build().perform();
+
+
+
+		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+		
+		driver.findElement(By.id("autocomplete-2")).click();
+		driver.findElement(By.id("autocomplete-2")).sendKeys("Av. Corrientes 348");
+
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+
+		List<WebElement> autoSuggestions=driver.findElements(By.cssSelector(".pac-item"));
+
+		for (WebElement suggestions : autoSuggestions) {
+			if (suggestions.getText().contains("Av. Corrientes 348")) {
+				suggestions.getText();
+				suggestions.click();
+
+				break;
+			}
+		}
+
+		String cssSelectors = "." + "FL2";
+
+		WebElement listaSucursal = driver.findElement(By.cssSelector(cssSelectors));
+		listaSucursal.click();
+		driver.findElement(By.cssSelector(".mz-sla__button > button")).click();
+
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+		WebElement element11 = driver.findElement(By.cssSelector(".gm-style > div:nth-child(2) > div:nth-child(3)"));
+		Actions builder11 = new Actions(driver);
+		builder11.moveToElement(element11).release().perform();
+
+
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		
+		
+		JavascriptExecutor js2 = (JavascriptExecutor) driver;
+		js2.executeScript("window.scrollBy(0,520)");
+		
+		
+		List<WebElement> autoSuggestions2=driver.findElements(By.xpath("//span[contains(@class,'AssemblyPill__picture')]"));
+
+		driver.manage().timeouts().implicitlyWait(16, TimeUnit.SECONDS);
+	
+		WebElement element12 = driver.findElement(By.xpath("//div[contains(text(),'Papas con Cheddar y Bacon')]"));
+		Actions builder12 = new Actions(driver);
+		builder12.moveToElement(element12).release().perform();
+		
+		autoSuggestions2.get(0).click();
+		
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+
+		try {
+			FileUtils.copyFile(scrFile, new File("./src/test/resources/screents/checkbox.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		JavascriptExecutor js1 = (JavascriptExecutor) driver;
+		js1.executeScript("window.scrollBy(0,580)");
+		
+		autoSuggestions2.get(4).click();
+
+
+
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+		File scrFile2 = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+
+		try {
+			FileUtils.copyFile(scrFile2, new File("./src/test/resources/screents/checkbox1.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+
+
+		driver.findElement(By.id("AddToCartButton__buyButton")).click();
+		
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+
+		driver.findElement(By.cssSelector("body.product.jsFullLoaded.qd-ddc-cart-rendered.qd-bb-lightBoxBodyProdAdd.qd-ddc-product-add-time-v2:nth-child(2) div.MZitemAddedModal:nth-child(10) div.MZitemAdded > a:nth-child(4)")).click();
+		
+
+		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+
+		driver.findElement(By.id("cart-to-orderform"));
+
+		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+
+
+		driver.findElement(By.cssSelector(".checkout-container")).click();
+
+		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+
+		driver.findElement(By.id("cart-to-orderform"));
+
+
+
+		driver.findElement(By.id("cart-to-orderform")).click();
+
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+	}
+
+	@After
+
+	public void teardown() {
+
+			driver.quit();
+
+	}
+
+}
